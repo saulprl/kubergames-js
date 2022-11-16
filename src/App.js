@@ -8,6 +8,9 @@ import {
 import { Redirect, Route, Switch } from "react-router-dom";
 import MainContent from "./components/layout/MainContent";
 import PermanentDrawer from "./components/layout/PermanentDrawer";
+import SnakeGamePage from "./components/pages/SnakeGamePage";
+import SpaceInvadersPage from "./components/pages/SpaceInvadersPage";
+import SnakeGame from "./components/games/snake-game/SnakeGame";
 
 function App() {
   const theme = createTheme({
@@ -49,6 +52,7 @@ function App() {
           <MainContent>
             <Box sx={{ height: "100%", width: "100%" }}>
               <Typography variant="h3">Snake game</Typography>
+              <SnakeGamePage />
             </Box>
           </MainContent>
         </Route>
