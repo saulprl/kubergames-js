@@ -5,14 +5,37 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Redirect, Route, Switch, useLocation } from "react-router-dom";
+import Header from "./components/layout/Header";
 import MainContent from "./components/layout/MainContent";
-import PermanentDrawer from "./components/layout/PermanentDrawer";
+import FlappyBirdPage from "./components/pages/FlappyBirdPage";
+import MinesweeperPage from "./components/pages/MinesweeperPage";
 import SnakeGamePage from "./components/pages/SnakeGamePage";
 import SpaceInvadersPage from "./components/pages/SpaceInvadersPage";
-import SnakeGame from "./components/games/snake-game/SnakeGame";
 
 function App() {
+  const [title, setTitle] = useState("Inicio");
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname === "/home") {
+      setTitle("Inicio");
+    }
+    if (pathname === "/space-invaders") {
+      setTitle("Space Invaders");
+    }
+    if (pathname === "/snake-game") {
+      setTitle("Snake Game");
+    }
+    if (pathname === "/minesweeper") {
+      setTitle("Buscaminas");
+    }
+    if (pathname === "/flappy-bird") {
+      setTitle("Flappy Bird");
+    }
+  }, [pathname]);
+
   const theme = createTheme({
     palette: {
       mode: "dark",
@@ -31,43 +54,46 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <PermanentDrawer />
+      <Header title={title} />
       <Switch>
         <Route path="/" exact render={() => <Redirect to="/home" />} />
         <Route path="/home" exact>
           <MainContent>
-            <Box sx={{ height: "100%", width: "100%" }}>
+            {/* <Box sx={{ height: "100%", width: "100%" }}>
               <Typography variant="h3">Welcome to Kubergames!</Typography>
-            </Box>
+            </Box> */}
           </MainContent>
         </Route>
         <Route path="/space-invaders" exact>
           <MainContent>
-            <Box sx={{ height: "100%", width: "100%" }}>
+            {/* <Box sx={{ height: "100%", width: "100%" }}>
               <Typography variant="h3">Space Invaders</Typography>
-            </Box>
+            </Box> */}
+            <SpaceInvadersPage />
           </MainContent>
         </Route>
         <Route path="/snake-game" exact>
           <MainContent>
-            <Box sx={{ height: "100%", width: "100%" }}>
+            {/* <Box sx={{ height: "100%", width: "100%" }}>
               <Typography variant="h3">Snake game</Typography>
-              <SnakeGamePage />
-            </Box>
+            </Box> */}
+            <SnakeGamePage />
           </MainContent>
         </Route>
         <Route path="/minesweeper" exact>
           <MainContent>
-            <Box sx={{ height: "100%", width: "100%" }}>
+            {/* <Box sx={{ height: "100%", width: "100%" }}>
               <Typography variant="h3">Minesweeper</Typography>
-            </Box>
+            </Box> */}
+            <MinesweeperPage />
           </MainContent>
         </Route>
         <Route path="/flappy-bird" exact>
           <MainContent>
-            <Box sx={{ height: "100%", width: "100%" }}>
+            {/* <Box sx={{ height: "100%", width: "100%" }}>
               <Typography variant="h3">Flappy Bird</Typography>
-            </Box>
+            </Box> */}
+            <FlappyBirdPage />
           </MainContent>
         </Route>
       </Switch>
