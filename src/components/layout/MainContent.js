@@ -4,8 +4,10 @@ const MainContent = (props) => {
   return (
     <Box
       sx={{
-        width: `calc(100% - 240)`,
-        ml: `240px`,
+        width: "calc(100% - 240)",
+        ml: "240px",
+        mt: "48px",
+        padding: "1rem",
       }}
     >
       {props.children}
