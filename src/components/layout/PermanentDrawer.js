@@ -60,10 +60,14 @@ const PermanentDrawer = (props) => {
   ];
 
   const drawer = (
-    <Box component="div">
+    <Box component="div" sx={{ width: "240px" }}>
       <Toolbar
         variant="dense"
-        sx={{ display: "flex", justifyContent: "space-between" }}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          background: theme.palette.primary.main,
+        }}
       >
         <Typography variant="h6">Kubergames</Typography>
       </Toolbar>
