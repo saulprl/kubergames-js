@@ -1,17 +1,14 @@
-import {
-  Box,
-  createTheme,
-  CssBaseline,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
 import { useEffect, useState } from "react";
+
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
+
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+
 import Header from "./components/layout/Header";
 import MainContent from "./components/layout/MainContent";
+import SnakeGamePage from "./components/pages/SnakeGamePage";
 import FlappyBirdPage from "./components/pages/FlappyBirdPage";
 import MinesweeperPage from "./components/pages/MinesweeperPage";
-import SnakeGamePage from "./components/pages/SnakeGamePage";
 import SpaceInvadersPage from "./components/pages/SpaceInvadersPage";
 
 function App() {
