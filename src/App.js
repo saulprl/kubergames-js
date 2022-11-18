@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     if (pathname === "/home") {
-      setTitle("Inicio");
+      setTitle("Kubergames");
     }
     if (pathname === "/space-invaders") {
       setTitle("Space Invaders");
