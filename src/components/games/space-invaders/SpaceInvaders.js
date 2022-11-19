@@ -15,21 +15,21 @@ let bolt;
 
 const sketch = (p5) => {
   // p5.preload = () => {
-    // alien = p5.loadImage("./assets/space-invaders/alien.png", (img) => img);
-    // leftArrow = p5.loadImage(
-    //   "./assets/space-invaders/left-arrow.png",
-    //   (img) => img
-    // );
-    // rightArrow = p5.loadImage(
-    //   "./assets/space-invaders/right-arrow.png",
-    //   (img) => img
-    // );
-    // spacebar = p5.loadImage(
-    //   "./assets/space-invaders/spacebar.png",
-    //   (img) => img
-    // );
-    // shipIcon = p5.loadImage("./assets/space-invaders/ship.png", (img) => img);
-    // bolt = p5.loadImage("./assets/space-invaders/bolt.png", (img) => img);
+  // alien = p5.loadImage("./assets/space-invaders/alien.png", (img) => img);
+  // leftArrow = p5.loadImage(
+  //   "./assets/space-invaders/left-arrow.png",
+  //   (img) => img
+  // );
+  // rightArrow = p5.loadImage(
+  //   "./assets/space-invaders/right-arrow.png",
+  //   (img) => img
+  // );
+  // spacebar = p5.loadImage(
+  //   "./assets/space-invaders/spacebar.png",
+  //   (img) => img
+  // );
+  // shipIcon = p5.loadImage("./assets/space-invaders/ship.png", (img) => img);
+  // bolt = p5.loadImage("./assets/space-invaders/bolt.png", (img) => img);
   // };
   p5.setup = () => {
     alien = p5.loadImage("./assets/space-invaders/alien.png", (img) => img);
@@ -105,9 +105,10 @@ const sketch = (p5) => {
       for (let i = 0; i < aliens.length; i++) {
         aliens[i].dir = 0;
       }
-      p5.noStroke();
-      p5.fill(255, 0, 0);
-      p5.strokeWeight(3);
+
+      p5.fill(255);
+      p5.stroke(255, 0, 0);
+      p5.strokeWeight(4);
       p5.textSize(40);
       p5.textAlign(p5.CENTER, p5.CENTER);
       p5.text("Game Over", (p5.width - 120) / 2, p5.height / 2);
@@ -151,10 +152,11 @@ const sketch = (p5) => {
     }
 
     if (p5.frameCount < 120) {
-      p5.fill("#ff200d");
-      p5.strokeWeight(1);
-      p5.textAlign(p5.CENTER, p5.CENTER);
+      p5.fill(255);
+      p5.stroke(255, 0, 0);
+      p5.strokeWeight(3);
       p5.textSize(20);
+      p5.textAlign(p5.CENTER, p5.CENTER);
       p5.text(
         "Press 'P' to pause or unpause",
         (p5.width - 120) / 2,
@@ -164,9 +166,10 @@ const sketch = (p5) => {
     }
 
     if (paused) {
-      p5.fill("#FF200D");
-      p5.textAlign(p5.CENTER, p5.CENTER);
+      p5.fill(255);
+      p5.stroke(255, 0, 0);
       p5.textSize(40);
+      p5.textAlign(p5.CENTER, p5.CENTER);
       p5.text("Paused", (p5.width - 120) / 2, p5.height / 2);
       pauseGame();
     }
@@ -208,15 +211,30 @@ const sketch = (p5) => {
     p5.fill(0, 255, 0, 40);
     p5.rect(420, 0, 120, 600);
 
-    p5.fill(255, 0, 0);
-    p5.strokeWeight(5);
+    p5.fill(255);
+    p5.stroke(255, 0, 0);
+    p5.strokeWeight(4);
     p5.textSize(20);
     p5.textAlign(p5.RIGHT, p5.CENTER);
     p5.text("Score", 530, 20);
 
+    p5.noStroke();
     p5.fill(0);
-    p5.rect(425, 29, 110, 22);
+    p5.rect(425, 31, 110, 22);
 
+    p5.fill(255);
+    p5.stroke(255, 0, 0);
+    p5.textSize(20);
+    p5.textAlign(p5.RIGHT, p5.CENTER);
+    p5.text("" + score, 530, 44);
+
+    p5.text("Lives", 530, 70);
+
+    for (let i = 0; i < ship.lives; i++) {
+      p5.image(shipIcon, i * 34 + 446, 98, 32, 32);
+    }
+
+    p5.noStroke();
     p5.imageMode(p5.CENTER);
     p5.image(leftArrow, 464, 500, 32, 32);
     p5.image(rightArrow, 498, 500, 32, 32);
@@ -230,21 +248,6 @@ const sketch = (p5) => {
     p5.image(spacebar, 480, 560, 48, 48);
 
     p5.text("Fire", 480, 540);
-
-    p5.fill(255, 0, 0);
-    p5.textSize(20);
-    p5.textAlign(p5.RIGHT, p5.CENTER);
-    p5.text("" + score, 530, 42);
-
-    p5.fill(255, 0, 0);
-    p5.textSize(20);
-    p5.strokeWeight(5);
-    p5.textAlign(p5.RIGHT, p5.CENTER);
-    p5.text("Lives", 530, 70);
-
-    for (let i = 0; i < ship.lives; i++) {
-      p5.image(shipIcon, i * 34 + 446, 98, 32, 32);
-    }
   };
 
   p5.keyReleased = () => {
@@ -396,7 +399,7 @@ const sketch = (p5) => {
   class Ship {
     constructor() {
       this.p5 = p5;
-      this.x = (p5.width - 120) / 2;
+      this.x = (this.p5.width - 120) / 2;
       this.dir = 0;
       this.lives = 3;
       this.dead = false;
@@ -433,7 +436,7 @@ const sketch = (p5) => {
 
       this.lock = function () {
         if (this.dead) {
-          this.x = (p5.width - 120) / 2;
+          this.x = (this.p5.width - 120) / 2;
           this.x = this.p5.constrain(
             this.x,
             (this.p5.width - 120) / 2,
