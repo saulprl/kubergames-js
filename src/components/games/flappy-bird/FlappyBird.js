@@ -1,10 +1,9 @@
 import { ReactP5Wrapper } from "react-p5-wrapper";
 
+let bird;
+let pipes;
+let score;
 const sketch = (p5) => {
-  let bird;
-  let pipes;
-  let score;
-
   p5.setup = () => {
     p5.createCanvas(400, 600);
     resetSketch();
@@ -34,12 +33,15 @@ const sketch = (p5) => {
     }
 
     p5.fill("#5e0eff");
-    p5.rect(310, 13, 85, 24);
+    p5.stroke(0);
+    p5.strokeWeight(1);
+    p5.rect(275, 13, 120, 27);
 
-    p5.fill(0);
-    p5.textSize(15);
-    p5.textAlign(p5.CENTER, p5.CENTER);
-    p5.text("Score: " + score, 350, 25);
+    p5.fill(255);
+    p5.strokeWeight(3);
+    p5.textSize(20);
+    p5.textAlign(p5.RIGHT, p5.CENTER);
+    p5.text("Score: " + score, 390, 28);
   };
 
   p5.keyPressed = () => {
@@ -49,10 +51,6 @@ const sketch = (p5) => {
       resetSketch();
     }
   };
-
-  function mouseFly() {
-    bird.fly();
-  }
 
   function resetSketch() {
     score = 0;
@@ -90,13 +88,15 @@ const sketch = (p5) => {
 
       this.death = function () {
         //   textFont(goFont);
-        this.p5.fill("red");
-        this.p5.textSize(30);
+        this.p5.fill(255);
+        this.p5.stroke(255, 0, 0);
+        this.p5.strokeWeight(6);
+        this.p5.textSize(40);
         this.p5.textAlign(this.p5.CENTER, this.p5.CENTER);
         this.p5.text("Game Over", this.p5.width / 2, this.p5.height / 2);
-        this.p5.textSize(15);
+        this.p5.textSize(20);
         this.p5.text(
-          "Press 'Enter' to try again.",
+          "Press 'Enter' to try again",
           this.p5.width / 2,
           this.p5.height / 2 + 35
         );
@@ -122,6 +122,7 @@ const sketch = (p5) => {
 
       this.show = function () {
         this.p5.fill(255);
+        this.p5.noStroke();
 
         if (this.highlight) {
           this.p5.fill(255, 0, 0);
