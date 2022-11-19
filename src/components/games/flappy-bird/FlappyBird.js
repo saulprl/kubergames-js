@@ -28,7 +28,7 @@ const sketch = (p5) => {
 
       if (pipes[i].isOffScreen()) {
         pipes.splice(i, 1);
-        score += 9;
+        score += 9 + p5.floor(score * 0.04);
       }
     }
 
