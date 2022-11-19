@@ -15,7 +15,7 @@ const sketch = (p5) => {
       return false;
     };
 
-    p5.createCanvas(640.5, 640.5);
+    p5.createCanvas(620.5, 620.5);
     resetSketch();
   };
 
@@ -94,7 +94,7 @@ const sketch = (p5) => {
         for (let i = 0; i < cols; i++) {
           for (let j = 0; j < rows; j++) {
             if (grid[i][j].contains(p5.mouseX, p5.mouseY)) {
-              grid[i][j].flag();
+              if (!grid[i][j].revealed) grid[i][j].flag();
             }
           }
         }
@@ -125,32 +125,33 @@ const sketch = (p5) => {
 
     switch (state) {
       case 0:
-        p5.fill(255, 0, 0);
+        p5.fill(255);
+        p5.stroke(255, 0, 0);
         p5.textSize(40);
-        p5.strokeWeight(4);
+        p5.strokeWeight(6);
         p5.textAlign(p5.CENTER, p5.CENTER);
-        p5.text("Game Over", p5.width / 2, p5.height / 2);
+        p5.text("Game Over", p5.width / 2, p5.height / 2 - 18);
 
         p5.textSize(27);
         p5.textAlign(p5.CENTER, p5.CENTER);
-        p5.strokeWeight(3);
-        p5.text("Press 'Enter' to try again", p5.width / 2, p5.height / 2 + 30);
+        // p5.strokeWeight(3);
+        p5.text("Press 'Enter' to try again", p5.width / 2, p5.height / 2 + 18);
         displayed = true;
         break;
       case 1:
+        p5.fill(255);
+        p5.stroke(0, 0, 255);
         p5.textSize(40);
-        p5.fill(0, 0, 255);
+        p5.strokeWeight(6);
         p5.textAlign(p5.CENTER, p5.CENTER);
-        p5.strokeWeight(4);
-        p5.text("You won!", p5.width / 2, p5.height / 2);
+        p5.text("You won!", p5.width / 2, p5.height / 2 - 18);
 
         p5.textSize(27);
         p5.textAlign(p5.CENTER, p5.CENTER);
-        p5.strokeWeight(3);
         p5.text(
           "Press 'Enter' to play again!",
           p5.width / 2,
-          p5.height / 2 + 30
+          p5.height / 2 + 18
         );
         break;
       default:
@@ -159,7 +160,7 @@ const sketch = (p5) => {
   };
 
   const resetSketch = () => {
-    scl = 40;
+    scl = 38.75;
     cols = p5.floor(p5.width / scl);
     rows = p5.floor(p5.height / scl);
     grid = makeGrid(cols, rows);
