@@ -8,6 +8,7 @@ let cols, rows;
 let finished;
 let blownUp;
 let displayed;
+let time;
 
 const sketch = (p5) => {
   p5.setup = () => {
@@ -122,6 +123,7 @@ const sketch = (p5) => {
         grid[i][j].reveal();
       }
     }
+    time = p5.floor(p5.frameCount / p5.frameRate());
 
     switch (state) {
       case 0:
@@ -130,6 +132,7 @@ const sketch = (p5) => {
         p5.textSize(40);
         p5.strokeWeight(6);
         p5.textAlign(p5.CENTER, p5.CENTER);
+        p5.text(`Time: ${time}s`, p5.width / 2, p5.height / 2 - 56);
         p5.text("Game Over", p5.width / 2, p5.height / 2 - 18);
 
         p5.textSize(27);
@@ -170,6 +173,7 @@ const sketch = (p5) => {
     blownUp = false;
     displayed = false;
     p5.frameCount = 0;
+    time = 0;
 
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
