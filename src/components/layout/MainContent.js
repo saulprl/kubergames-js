@@ -7,7 +7,9 @@ const MainContent = (props) => {
         width: "calc(100% - 240)",
         ml: "240px",
         mt: "48px",
-        padding: "1rem",
+        pt: "1rem",
+        pl: "1rem",
+        pr: "1rem",
       }}
     >
       {props.children}
