@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { Box, Button, Grid, Skeleton, TextField } from "@mui/material";
+import { useEffect } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 
 let scl = 20;
 let snake;
 let food;
-let score;
+let score = 0;
 let apple;
 let paused;
 
@@ -243,14 +244,49 @@ const sketch = (p5) => {
 };
 
 const SnakeGame = () => {
-  useState(() => {
+  let content = <Skeleton animation="wave" variant="rounded" height={60} width="100%"></Skeleton>
+  useEffect(() => {
     fetch("http://api.kubergames.io/kubergames/snake-game").then((res) => {
       console.log(res);
-      res.json().then((data) => console.log(data));
+      content = res.json().then((data) => data).map((row) => 
+      <>
+      <Grid item xs={6}>{row['name_sg']}</Grid>
+      <Grid item xs={6}>{row['score_sg']}</Grid>
+      </>);
     });
   }, []);
 
-  return <ReactP5Wrapper sketch={sketch} />;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = {
+      name: event.target.name.value,
+      score: score,
+    }
+    await fetch("http://api.kubergames.io/kubergames/snake-game", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    
+    fetch("http://api.kubergames.io/kubergames/snake-game").then((res) => {
+      console.log(res);
+      content = res.json().then((data) => data).map((row) => 
+      <>
+      <Grid item xs={6}>{row['name_si']}</Grid>
+      <Grid item xs={6}>{row['score_si']}</Grid>
+      </>);
+    });
+  };
+
+  return (<Box sx={{display:"flex", justifyContent:"space-between"}}>
+  <ReactP5Wrapper sketch={sketch} />
+  <Box>
+    <form onSubmit={handleSubmit}>
+  <TextField label="Nombre" name="name" inputProps={{maxlength:4}}></TextField>
+  <Button type="submit">Submit</Button>
+  </form>
+  <Grid container>{content}</Grid>
+  </Box>
+  </Box>);
 };
 
 export default SnakeGame;

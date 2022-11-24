@@ -1,9 +1,10 @@
+import { Box, Grid, Skeleton, Button, TextField } from "@mui/material";
 import { useEffect } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 
 let bird;
 let pipes;
-let score;
+let score = 0;
 const sketch = (p5) => {
   p5.setup = () => {
     p5.createCanvas(400, 600);
@@ -195,14 +196,49 @@ const sketch = (p5) => {
 };
 
 const FlappyBird = () => {
+  let content = <Skeleton animation="wave" variant="rounded" height={60} width="100%"></Skeleton>
   useEffect(() => {
     fetch("http://api.kubergames.io/kubergames/flappy-bird").then((res) => {
       console.log(res);
-      res.json().then((data) => console.log(data));
+      content = res.json().then((data) => data).map((row) => 
+      <>
+      <Grid item xs={6}>{row['name_fb']}</Grid>
+      <Grid item xs={6}>{row['score_fb']}</Grid>
+      </>);
     });
   }, []);
 
-  return <ReactP5Wrapper sketch={sketch} />;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = {
+      name: event.target.name.value,
+      score: score,
+    }
+    await fetch("http://api.kubergames.io/kubergames/flappy-bird", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    fetch("http://api.kubergames.io/kubergames/flappy-bird").then((res) => {
+      console.log(res);
+      content = res.json().then((data) => data).map((row) => 
+      <>
+      <Grid item xs={6}>{row['name_si']}</Grid>
+      <Grid item xs={6}>{row['score_si']}</Grid>
+      </>);
+    });
+  };
+
+  return (
+  <Box sx={{display:"flex", justifyContent:"space-between"}}>
+  <ReactP5Wrapper sketch={sketch} />
+  <Box>
+    <form onSubmit={handleSubmit}>
+  <TextField label="Nombre" name="name" inputProps={{maxlength:4}}></TextField>
+  <Button type="submit">Submit</Button>
+  </form>
+  <Grid container>{content}</Grid>
+  </Box>
+  </Box>);
 };
 
 export default FlappyBird;

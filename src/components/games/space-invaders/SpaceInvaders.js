@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
+import { Box, Grid, Skeleton, Button, TextField } from "@mui/material";
 
 let ship;
 let aliens = [];
@@ -450,14 +451,49 @@ const sketch = (p5) => {
 };
 
 const SpaceInvaders = () => {
+  let content = <Skeleton animation="wave" variant="rounded" height={60} width="100%"></Skeleton>
   useEffect(() => {
     fetch("http://api.kubergames.io/kubergames/space-invaders").then((res) => {
       console.log(res);
-      res.json().then((data) => console.log(data));
+      content = res.json().then((data) => data).map((row) => 
+      <>
+      <Grid item xs={6}>{row['name_si']}</Grid>
+      <Grid item xs={6}>{row['score_si']}</Grid>
+      </>);
     });
   }, []);
 
-  return <ReactP5Wrapper sketch={sketch} />;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = {
+      name: event.target.name.value,
+      score: score,
+    }
+    await fetch("http://api.kubergames.io/kubergames/space-invaders", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    fetch("http://api.kubergames.io/kubergames/space-invaders").then((res) => {
+      console.log(res);
+      content = res.json().then((data) => data).map((row) => 
+      <>
+      <Grid item xs={6}>{row['name_si']}</Grid>
+      <Grid item xs={6}>{row['score_si']}</Grid>
+      </>);
+    });
+  };
+
+  return (
+    <Box sx={{display:"flex", justifyContent:"space-between"}}>
+    <ReactP5Wrapper sketch={sketch} />
+    <Box>
+      <form onSubmit={handleSubmit}>
+    <TextField label="Nombre" name="name" inputProps={{maxlength:4}}></TextField>
+    <Button type="submit">Submit</Button>
+    </form>
+    <Grid container>{content}</Grid>
+    </Box>
+    </Box>);
 };
 
 export default SpaceInvaders;
