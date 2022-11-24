@@ -1,5 +1,8 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, Card, CardContent, TextField } from "@mui/material";
+import { useState } from "react";
+
 import { ReactP5Wrapper } from "react-p5-wrapper";
+
 import Scores from "../../layout/Scores";
 
 let scl = 20;
@@ -244,14 +247,34 @@ const sketch = (p5) => {
 };
 
 const SnakeGame = () => {
+  const [error, setError] = useState("");
+
+  const host =
+    process.env.NODE_ENV === "development"
+      ? "localhost:30001"
+      : "api.kubergames.io";
+
+  const submitChangeHandler = (event) => {
+    setError("");
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError("");
+    if (event.target.name.value === "") {
+      setError("Ingresa un nombre.");
+      return;
+    }
+    if (!snake.dead) {
+      setError("Debes acabar la partida antes de guardar tu puntuación.");
+      return;
+    }
+
     const data = {
       name: event.target.name.value,
       score: score,
     };
-    console.log(data);
-    await fetch("http://api.kubergames.io/kubergames/snake-game/add", {
+    await fetch(`http://${host}/kubergames/snake-game/add`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -263,19 +286,56 @@ const SnakeGame = () => {
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <ReactP5Wrapper sketch={sketch} />
-      <Box>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label="Nombre"
-            name="name"
-            inputProps={{ maxLength: 4 }}
-          ></TextField>
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
-        </form>
-        <Scores game="snake-game" nameField="name_sg" scoreField="score_sg" />
-      </Box>
+      <Card
+        className="score-card"
+        variant="outlined"
+        sx={{
+          borderRadius: "12px",
+          maxHeight: "38rem",
+          width: "35%",
+          overflow: "auto",
+        }}
+      >
+        <CardContent>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
+              <TextField
+                required
+                onChange={submitChangeHandler}
+                label="Nombre"
+                name="name"
+                inputProps={{ maxLength: 4 }}
+                error={error !== ""}
+                helperText={error !== "" && error}
+              />
+              <Button variant="contained" type="submit">
+                Submit
+              </Button>
+            </Box>
+            <Scores
+              game="snake-game"
+              nameField="name_sg"
+              scoreField="score_sg"
+            />
+          </Box>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

@@ -1,6 +1,8 @@
-import { Box, Grid, Skeleton, Button, TextField } from "@mui/material";
-import { useEffect } from "react";
+import { Box, Button, Card, CardContent, TextField } from "@mui/material";
+import { useState } from "react";
+
 import { ReactP5Wrapper } from "react-p5-wrapper";
+
 import Scores from "../../layout/Scores";
 
 let bird;
@@ -71,6 +73,7 @@ const sketch = (p5) => {
       this.r = 16;
       this.gravity = 0.8;
       this.velocity = 0;
+      this.dead = false;
 
       this.show = function () {
         this.p5.fill("#262fff");
@@ -91,6 +94,7 @@ const sketch = (p5) => {
 
       this.death = function () {
         //   textFont(goFont);
+        this.dead = true;
         this.p5.fill(255);
         this.p5.stroke(255, 0, 0);
         this.p5.strokeWeight(6);
@@ -197,13 +201,34 @@ const sketch = (p5) => {
 };
 
 const FlappyBird = () => {
+  const [error, setError] = useState("");
+
+  const host =
+    process.env.NODE_ENV === "development"
+      ? "localhost:30001"
+      : "api.kubergames.io";
+
+  const submitChangeHandler = (event) => {
+    setError("");
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError("");
+    if (event.target.name.value === "") {
+      setError("Ingresa un nombre.");
+      return;
+    }
+    if (!bird.dead) {
+      setError("Debes acabar la partida antes de guardar tu puntuación.");
+      return;
+    }
+
     const data = {
       name: event.target.name.value,
       score: score,
     };
-    await fetch("http://api.kubergames.io/kubergames/flappy-bird/add", {
+    await fetch(`http://${host}/kubergames/flappy-bird/add`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -215,19 +240,56 @@ const FlappyBird = () => {
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <ReactP5Wrapper sketch={sketch} />
-      <Box>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label="Nombre"
-            name="name"
-            inputProps={{ maxLength: 4 }}
-          ></TextField>
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
-        </form>
-        <Scores game="flappy-bird" nameField="name_fb" scoreField="score_fb" />
-      </Box>
+      <Card
+        className="score-card"
+        variant="outlined"
+        sx={{
+          borderRadius: "12px",
+          maxHeight: "38rem",
+          width: "35%",
+          overflow: "auto",
+        }}
+      >
+        <CardContent>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
+              <TextField
+                required
+                onChange={submitChangeHandler}
+                label="Nombre"
+                name="name"
+                inputProps={{ maxLength: 4 }}
+                error={error !== ""}
+                helperText={error !== "" && error}
+              />
+              <Button variant="contained" type="submit">
+                Submit
+              </Button>
+            </Box>
+            <Scores
+              game="flappy-bird"
+              nameField="name_fb"
+              scoreField="score_fb"
+            />
+          </Box>
+        </CardContent>
+      </Card>
     </Box>
   );
 };
