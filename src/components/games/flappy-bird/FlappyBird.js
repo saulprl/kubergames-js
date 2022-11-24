@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 
 let bird;
@@ -194,6 +195,13 @@ const sketch = (p5) => {
 };
 
 const FlappyBird = () => {
+  useEffect(() => {
+    fetch("http://api.kubergames.io/kubergames/flappy-bird").then((res) => {
+      console.log(res);
+      res.json().then((data) => console.log(data));
+    });
+  }, []);
+
   return <ReactP5Wrapper sketch={sketch} />;
 };
 

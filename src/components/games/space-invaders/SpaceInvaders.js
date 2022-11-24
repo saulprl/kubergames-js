@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 
 let ship;
@@ -449,6 +450,13 @@ const sketch = (p5) => {
 };
 
 const SpaceInvaders = () => {
+  useEffect(() => {
+    fetch("http://api.kubergames.io/kubergames/space-invaders").then((res) => {
+      console.log(res);
+      res.json().then((data) => console.log(data));
+    });
+  }, []);
+
   return <ReactP5Wrapper sketch={sketch} />;
 };
 

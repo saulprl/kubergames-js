@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 
 let scl = 20;
@@ -242,6 +243,13 @@ const sketch = (p5) => {
 };
 
 const SnakeGame = () => {
+  useState(() => {
+    fetch("http://api.kubergames.io/kubergames/snake-game").then((res) => {
+      console.log(res);
+      res.json().then((data) => console.log(data));
+    });
+  }, []);
+
   return <ReactP5Wrapper sketch={sketch} />;
 };
 
