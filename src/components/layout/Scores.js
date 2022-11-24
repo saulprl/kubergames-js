@@ -1,52 +1,87 @@
+import { useCallback, useEffect, useState } from "react";
 import {
   Box,
+  Button,
+  Card,
   Chip,
-  Grid,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Typography,
 } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
 
 const Scores = (props) => {
   const [scores, setScores] = useState([]);
+  const host =
+    process.env.NODE_ENV === "development"
+      ? "localhost:30001"
+      : "api.kubergames.io";
+
+  let content = <Typography variant="body1">Sin registros</Typography>;
 
   const fetchScores = useCallback(async () => {
-    const res = await fetch(
-      `http://api.kubergames.io/kubergames/${props.game}`
-    );
+    const res = await fetch(`http://${host}/kubergames/${props.game}`);
 
     const data = await res.json();
     setScores(data.results);
-  }, [props.game]);
+  }, [props.game, host]);
 
   useEffect(() => {
     fetchScores();
   }, [fetchScores]);
 
-  let content = <Typography variant="body1">No scores found</Typography>;
-
   if (scores.length > 0) {
     content = scores.map((record, index) => (
-      <ListItem
+      <Card
         key={index}
-        secondaryAction={
-          <Typography variant="body1">
-            {record[`${props.scoreField}`]}
-          </Typography>
-        }
+        variant="outlined"
+        sx={{
+          background: "#0a1929",
+          borderRadius: "16px",
+          mb: "0.5rem",
+          width: "100%",
+        }}
       >
-        <ListItemIcon>
-          <Chip variant="outlined" color="primary" label={index + 1} />
-        </ListItemIcon>
-        <ListItemText primary={record[`${props.nameField}`]} />
-      </ListItem>
+        <ListItem
+          // key={index}
+          sx={{ width: "100%" }}
+          secondaryAction={
+            <Typography variant="body1">
+              {record[`${props.scoreField}`]}
+            </Typography>
+          }
+        >
+          <ListItemIcon>
+            <Chip variant="contained" color="primary" label={index + 1} />
+          </ListItemIcon>
+          <ListItemText primary={record[`${props.nameField}`]} />
+        </ListItem>
+      </Card>
     ));
   }
 
-  return <List>{content}</List>;
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        mt: "0.5rem",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={fetchScores}
+        sx={{ width: "95%", borderRadius: "16px" }}
+      >
+        Actualizar
+      </Button>
+      <List sx={{ width: "95%" }}>{content}</List>
+    </Box>
+  );
 };
 
 export default Scores;
