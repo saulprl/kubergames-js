@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardContent, TextField } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { ReactP5Wrapper } from "react-p5-wrapper";
 
@@ -454,12 +454,10 @@ const sketch = (p5) => {
 };
 
 const SpaceInvaders = () => {
+  const nameRef = useRef();
   const [error, setError] = useState("");
 
-  const host =
-    process.env.NODE_ENV === "development"
-      ? "localhost:30001"
-      : "api.kubergames.io";
+  const host = process.env.API_URL;
 
   const submitChangeHandler = (event) => {
     setError("");
@@ -481,13 +479,15 @@ const SpaceInvaders = () => {
       name: event.target.name.value,
       score: score,
     };
-    await fetch(`http://${host}/kubergames/space-invaders/add`, {
+    await fetch(`http://${host}/kubergames/space-invaders/`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
     });
+
+    nameRef.current.value = "";
   };
 
   return (
@@ -523,6 +523,7 @@ const SpaceInvaders = () => {
               }}
             >
               <TextField
+                inputRef={nameRef}
                 required
                 onChange={submitChangeHandler}
                 label="Nombre"
@@ -535,11 +536,7 @@ const SpaceInvaders = () => {
                 Submit
               </Button>
             </Box>
-            <Scores
-              game="space-invaders"
-              nameField="name_si"
-              scoreField="score_si"
-            />
+            <Scores game="space-invaders" />
           </Box>
         </CardContent>
       </Card>

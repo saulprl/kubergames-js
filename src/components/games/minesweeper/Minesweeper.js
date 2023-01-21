@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardContent, TextField } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { ReactP5Wrapper } from "react-p5-wrapper";
 
@@ -344,12 +344,10 @@ const sketch = (p5) => {
 };
 
 const Minesweeper = () => {
+  const nameRef = useRef();
   const [error, setError] = useState("");
 
-  const host =
-    process.env.NODE_ENV === "development"
-      ? "localhost:30001"
-      : "api.kubergames.io";
+  const host = process.env.API_URL;
 
   const submitChangeHandler = (event) => {
     setError("");
@@ -366,13 +364,15 @@ const Minesweeper = () => {
       name: event.target.name.value,
       score: time,
     };
-    await fetch(`http://${host}/kubergames/minesweeper/add`, {
+    await fetch(`http://${host}/kubergames/minesweeper/`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
     });
+
+    nameRef.current.value = "";
   };
 
   return (
@@ -408,6 +408,7 @@ const Minesweeper = () => {
               }}
             >
               <TextField
+                inputRef={nameRef}
                 required
                 onChange={submitChangeHandler}
                 label="Nombre"
@@ -420,11 +421,7 @@ const Minesweeper = () => {
                 Submit
               </Button>
             </Box>
-            <Scores
-              game="minesweeper"
-              nameField="name_ms"
-              scoreField="score_ms"
-            />
+            <Scores game="minesweeper" />
           </Box>
         </CardContent>
       </Card>

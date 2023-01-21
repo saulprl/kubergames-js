@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardContent, TextField } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { ReactP5Wrapper } from "react-p5-wrapper";
 
@@ -201,12 +201,10 @@ const sketch = (p5) => {
 };
 
 const FlappyBird = () => {
+  const nameRef = useRef();
   const [error, setError] = useState("");
 
-  const host =
-    process.env.NODE_ENV === "development"
-      ? "localhost:30001"
-      : "api.kubergames.io";
+  const host = process.env.API_URL;
 
   const submitChangeHandler = (event) => {
     setError("");
@@ -228,13 +226,15 @@ const FlappyBird = () => {
       name: event.target.name.value,
       score: score,
     };
-    await fetch(`http://${host}/kubergames/flappy-bird/add`, {
+    await fetch(`http://${host}/kubergames/flappy-bird/`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
     });
+
+    nameRef.current.value = "";
   };
 
   return (
@@ -270,6 +270,7 @@ const FlappyBird = () => {
               }}
             >
               <TextField
+                inputRef={nameRef}
                 required
                 onChange={submitChangeHandler}
                 label="Nombre"
@@ -282,11 +283,7 @@ const FlappyBird = () => {
                 Submit
               </Button>
             </Box>
-            <Scores
-              game="flappy-bird"
-              nameField="name_fb"
-              scoreField="score_fb"
-            />
+            <Scores game="flappy-bird" />
           </Box>
         </CardContent>
       </Card>
