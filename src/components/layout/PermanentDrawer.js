@@ -28,6 +28,7 @@ const PermanentDrawer = (props) => {
       onClick: (event) => {
         history.push("/home");
       },
+      selected: /home/i.test(history.location.pathname),
     },
     {
       text: "Space Invaders",
@@ -35,6 +36,7 @@ const PermanentDrawer = (props) => {
       onClick: (event) => {
         history.push("/space-invaders");
       },
+      selected: /space-invaders/i.test(history.location.pathname),
     },
     {
       text: "Snake Game",
@@ -42,6 +44,7 @@ const PermanentDrawer = (props) => {
       onClick: (event) => {
         history.push("/snake-game");
       },
+      selected: /snake-game/i.test(history.location.pathname),
     },
     {
       text: "Buscaminas",
@@ -49,6 +52,7 @@ const PermanentDrawer = (props) => {
       onClick: (event) => {
         history.push("/minesweeper");
       },
+      selected: /minesweeper/i.test(history.location.pathname),
     },
     {
       text: "Flappy Bird",
@@ -56,6 +60,7 @@ const PermanentDrawer = (props) => {
       onClick: (event) => {
         history.push("/flappy-bird");
       },
+      selected: /flappy-bird/i.test(history.location.pathname),
     },
   ];
 
@@ -74,7 +79,7 @@ const PermanentDrawer = (props) => {
       <Divider />
       {drawerButtons.map((item, index) => (
         <ListItem key={index} disablePadding>
-          <ListItemButton onClick={item.onClick}>
+          <ListItemButton selected={item.selected} onClick={item.onClick}>
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.text} />
           </ListItemButton>
