@@ -13,10 +13,7 @@ import {
 
 const Scores = (props) => {
   const [scores, setScores] = useState([]);
-  const host =
-    process.env.NODE_ENV === "development"
-      ? "localhost:30001"
-      : "api.kubergames.io";
+  const host = process.env.API_URL;
 
   let content = <Typography variant="body1">Sin registros</Typography>;
 
@@ -24,7 +21,7 @@ const Scores = (props) => {
     const res = await fetch(`http://${host}/kubergames/${props.game}`);
 
     const data = await res.json();
-    setScores(data.results);
+    setScores(data.scores);
   }, [props.game, host]);
 
   useEffect(() => {
@@ -47,15 +44,13 @@ const Scores = (props) => {
           // key={index}
           sx={{ width: "100%" }}
           secondaryAction={
-            <Typography variant="body1">
-              {record[`${props.scoreField}`]}
-            </Typography>
+            <Typography variant="body1">{record.score}</Typography>
           }
         >
           <ListItemIcon>
             <Chip variant="contained" color="primary" label={index + 1} />
           </ListItemIcon>
-          <ListItemText primary={record[`${props.nameField}`]} />
+          <ListItemText primary={record.name} />
         </ListItem>
       </Card>
     ));
