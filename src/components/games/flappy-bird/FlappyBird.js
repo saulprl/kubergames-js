@@ -204,7 +204,7 @@ const FlappyBird = () => {
   const nameRef = useRef();
   const [error, setError] = useState("");
 
-  const host = process.env.API_URL;
+  const host = process.env.REACT_APP_API_URL;
 
   const submitChangeHandler = (event) => {
     setError("");

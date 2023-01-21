@@ -13,7 +13,7 @@ import {
 
 const Scores = (props) => {
   const [scores, setScores] = useState([]);
-  const host = process.env.API_URL;
+  const host = process.env.REACT_APP_API_URL;
 
   let content = <Typography variant="body1">Sin registros</Typography>;
 
