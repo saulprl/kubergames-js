@@ -6,7 +6,7 @@ const MainContent = (props) => {
       sx={{
         width: "calc(100% - 240)",
         ml: "240px",
-        mt: "48px",
+        // mt: "48px",
         pt: "1rem",
         pl: "1rem",
         pr: "1rem",
