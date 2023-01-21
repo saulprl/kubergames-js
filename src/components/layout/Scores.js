@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -8,27 +7,43 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Skeleton,
   Typography,
 } from "@mui/material";
 
+import useScores from "../../hooks/useScores";
+
 const Scores = (props) => {
-  const [scores, setScores] = useState([]);
-  const host = process.env.REACT_APP_API_URL;
+  const { fetchScores, isLoading, scores, error } = useScores(props.game);
 
-  let content = <Typography variant="body1">Sin registros</Typography>;
+  let content;
 
-  const fetchScores = useCallback(async () => {
-    const res = await fetch(`${host}/kubergames/${props.game}`);
+  if (isLoading) {
+    content = [...Array(10).keys()].map((i) => (
+      <Skeleton
+        key={i}
+        component="li"
+        animation="pulse"
+        variant="rounded"
+        height={36}
+        sx={{
+          mb: "0.5rem",
+          animationDelay: `${i * 0.05}s`,
+          animationDuration: "1s",
+        }}
+      />
+    ));
+  }
 
-    const data = await res.json();
-    setScores(data.scores);
-  }, [props.game, host]);
+  if (!isLoading && error) {
+    content = <Typography variant="body1">{error}</Typography>;
+  }
 
-  useEffect(() => {
-    fetchScores();
-  }, [fetchScores]);
+  if (!isLoading && !error && scores.length === 0) {
+    content = <Typography variant="body1">Sin registros</Typography>;
+  }
 
-  if (scores.length > 0) {
+  if (!isLoading && !error && scores.length > 0) {
     content = scores.map((record, index) => (
       <Card
         key={index}
@@ -70,6 +85,7 @@ const Scores = (props) => {
         variant="contained"
         color="primary"
         onClick={fetchScores}
+        disabled={isLoading}
         sx={{ width: "95%", borderRadius: "16px" }}
       >
         Actualizar
