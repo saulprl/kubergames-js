@@ -272,7 +272,7 @@ const SnakeGame = () => {
       name: event.target.name.value,
       score: score,
     };
-    await fetch(`http://${host}/kubergames/snake-game/`, {
+    await fetch(`${host}/kubergames/snake-game/`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

@@ -479,7 +479,7 @@ const SpaceInvaders = () => {
       name: event.target.name.value,
       score: score,
     };
-    await fetch(`http://${host}/kubergames/space-invaders/`, {
+    await fetch(`${host}/kubergames/space-invaders/`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

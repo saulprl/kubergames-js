@@ -364,7 +364,7 @@ const Minesweeper = () => {
       name: event.target.name.value,
       score: time,
     };
-    await fetch(`http://${host}/kubergames/minesweeper/`, {
+    await fetch(`${host}/kubergames/minesweeper/`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

@@ -18,7 +18,7 @@ const Scores = (props) => {
   let content = <Typography variant="body1">Sin registros</Typography>;
 
   const fetchScores = useCallback(async () => {
-    const res = await fetch(`http://${host}/kubergames/${props.game}`);
+    const res = await fetch(`${host}/kubergames/${props.game}`);
 
     const data = await res.json();
     setScores(data.scores);

@@ -226,7 +226,7 @@ const FlappyBird = () => {
       name: event.target.name.value,
       score: score,
     };
-    await fetch(`http://${host}/kubergames/flappy-bird/`, {
+    await fetch(`${host}/kubergames/flappy-bird/`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
