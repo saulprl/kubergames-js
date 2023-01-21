@@ -1,14 +1,10 @@
-import { AppBar, Toolbar, Typography, useTheme } from "@mui/material";
-
 import PermanentDrawer from "./PermanentDrawer";
 
 const Header = (props) => {
-  const theme = useTheme();
-
   return (
     <>
       <PermanentDrawer />
-      <header>
+      {/* <header>
         <AppBar
           position="fixed"
           sx={{
@@ -21,7 +17,7 @@ const Header = (props) => {
             <Typography variant="h6">{props.title}</Typography>
           </Toolbar>
         </AppBar>
-      </header>
+      </header> */}
     </>
   );
 };
