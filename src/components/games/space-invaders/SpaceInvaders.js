@@ -1,4 +1,12 @@
-import { Box, Button, Card, CardContent, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useRef, useState } from "react";
 
 import { ReactP5Wrapper } from "react-p5-wrapper";
@@ -455,37 +463,50 @@ const sketch = (p5) => {
 
 const SpaceInvaders = () => {
   const nameRef = useRef();
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [nameError, setNameError] = useState("");
 
   const host = process.env.REACT_APP_API_URL;
 
   const submitChangeHandler = (event) => {
-    setError("");
+    setNameError("");
+    setSubmitError(null);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError("");
+    setNameError("");
+    setSubmitError(null);
+
     if (event.target.name.value === "") {
-      setError("Ingresa un nombre.");
+      setNameError("Ingresa un nombre.");
       return;
     }
     if (!ship.dead) {
-      setError("Debes acabar la partida antes de guardar tu puntuación.");
+      setNameError("Debes acabar la partida antes de guardar tu puntuación.");
       return;
     }
 
-    const data = {
-      name: event.target.name.value,
-      score: score,
-    };
-    await fetch(`${host}/kubergames/space-invaders/`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      setIsLoading(true);
+
+      const data = {
+        name: event.target.name.value,
+        score: score,
+      };
+      await fetch(`${host}/kubergames/space-invaders/`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      setSubmitError("No fue posible conectar con el servidor.");
+    } finally {
+      setIsLoading(false);
+    }
 
     nameRef.current.value = "";
   };
@@ -511,6 +532,11 @@ const SpaceInvaders = () => {
               alignItems: "center",
             }}
           >
+            {submitError && (
+              <Typography variant="body1" color="error" sx={{ mb: "4px" }}>
+                {submitError}
+              </Typography>
+            )}
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -529,12 +555,16 @@ const SpaceInvaders = () => {
                 label="Nombre"
                 name="name"
                 inputProps={{ maxLength: 4 }}
-                error={error !== ""}
-                helperText={error !== "" && error}
+                error={nameError !== ""}
+                helperText={nameError !== "" && nameError}
               />
-              <Button variant="contained" type="submit">
-                Submit
-              </Button>
+              {isLoading ? (
+                <CircularProgress />
+              ) : (
+                <Button variant="contained" type="submit">
+                  Submit
+                </Button>
+              )}
             </Box>
             <Scores game="space-invaders" />
           </Box>
