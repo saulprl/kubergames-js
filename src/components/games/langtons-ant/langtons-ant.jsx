@@ -23,8 +23,8 @@ const sketch = (p5) => {
     p5.background(255);
 
     ant.update();
-    ant.display();
     displayGrid();
+    ant.display();
     displaySteps();
   };
 
