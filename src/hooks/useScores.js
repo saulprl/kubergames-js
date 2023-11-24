@@ -4,7 +4,7 @@ const useScores = (game) => {
   const [isLoading, setIsLoading] = useState(false);
   const [scores, setScores] = useState([]);
   const [error, setError] = useState(null);
-  const host = import.meta.env.REACT_APP_API_URL;
+  const host = process.env.REACT_APP_API_URL;
 
   const fetchScores = useCallback(async () => {
     try {
