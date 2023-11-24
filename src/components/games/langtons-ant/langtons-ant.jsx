@@ -13,15 +13,14 @@ const sketch = (p5) => {
 
   p5.setup = () => {
     p5.createCanvas(600, 600);
-    cols = 40;
-    rows = 40;
+    cols = 60;
+    rows = 60;
     grid = createGrid(cols, rows);
     ant = new LangtonsAnt(p5.floor(cols / 2), p5.floor(rows / 2));
   };
 
   p5.draw = () => {
     p5.background(255);
-    p5.stroke(220);
 
     ant.update();
     ant.display();
@@ -102,7 +101,7 @@ const sketch = (p5) => {
       let w = this.p5.width / cols;
       let h = this.p5.height / rows;
 
-      this.p5.fill(255);
+      this.p5.fill("#e91e63");
       this.p5.rect(this.x * w, this.y * h, w, h);
     }
   }
