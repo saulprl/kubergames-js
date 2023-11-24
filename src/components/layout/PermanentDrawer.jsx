@@ -62,6 +62,22 @@ const PermanentDrawer = (props) => {
       },
       selected: /flappy-bird/i.test(history.location.pathname),
     },
+    {
+      text: "Maze Generator",
+      icon: <GamesIcon />,
+      onClick: (event) => {
+        history.push("/maze-generator");
+      },
+      selected: /maze-generator/i.test(history.location.pathname),
+    },
+    {
+      text: "Langton's Ant",
+      icon: <GamesIcon />,
+      onClick: (event) => {
+        history.push("/langtons-ant");
+      },
+      selected: /langtons-ant/i.test(history.location.pathname),
+    },
   ];
 
   const drawer = (

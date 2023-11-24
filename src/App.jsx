@@ -10,6 +10,8 @@ import SnakeGamePage from "./components/pages/SnakeGamePage";
 import FlappyBirdPage from "./components/pages/FlappyBirdPage";
 import MinesweeperPage from "./components/pages/MinesweeperPage";
 import SpaceInvadersPage from "./components/pages/SpaceInvadersPage";
+import MazePage from "./components/pages/maze-page";
+import LangtonsPage from "./components/pages/langtons-page";
 
 function App() {
   const [title, setTitle] = useState("Inicio");
@@ -87,10 +89,17 @@ function App() {
         </Route>
         <Route path="/flappy-bird" exact>
           <MainContent>
-            {/* <Box sx={{ height: "100%", width: "100%" }}>
-              <Typography variant="h3">Flappy Bird</Typography>
-            </Box> */}
             <FlappyBirdPage />
+          </MainContent>
+        </Route>
+        <Route path="/maze-generator" exact>
+          <MainContent>
+            <MazePage />
+          </MainContent>
+        </Route>
+        <Route path="/langtons-ant" exact>
+          <MainContent>
+            <LangtonsPage />
           </MainContent>
         </Route>
       </Switch>

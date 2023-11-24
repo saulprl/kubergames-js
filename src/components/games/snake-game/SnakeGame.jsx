@@ -260,7 +260,7 @@ const SnakeGame = () => {
   const [submitError, setSubmitError] = useState(null);
   const [nameError, setNameError] = useState("");
 
-  const host = process.env.REACT_APP_API_URL;
+  const host = import.meta.env.REACT_APP_API_URL;
 
   const submitChangeHandler = (event) => {
     setNameError("");
